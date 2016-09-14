@@ -15,8 +15,7 @@ except ImportError:
     # Python 3 Support
     from io import StringIO
 
-sys.path.append('src/python-json-logger')
-from pythonjsonlogger import jsonlogger
+from logging_json import JSONFormatter
 import datetime
 
 
@@ -30,7 +29,7 @@ class TestJsonLogger(unittest.TestCase):
         self.logger.addHandler(self.logHandler)
 
     def testDefaultFormat(self):
-        fr = jsonlogger.JsonFormatter()
+        fr = JSONFormatter()
         self.logHandler.setFormatter(fr)
 
         msg = "testing logging format"
@@ -63,7 +62,7 @@ class TestJsonLogger(unittest.TestCase):
         log_format = lambda x: ['%({0:s})'.format(i) for i in x]
         custom_format = ' '.join(log_format(supported_keys))
 
-        fr = jsonlogger.JsonFormatter(custom_format)
+        fr = JSONFormatter(custom_format)
         self.logHandler.setFormatter(fr)
 
         msg = "testing logging format"
@@ -76,7 +75,7 @@ class TestJsonLogger(unittest.TestCase):
                 self.assertTrue(True)
 
     def testUnknownFormatKey(self):
-        fr = jsonlogger.JsonFormatter('%(unknown_key)s %(message)s')
+        fr = JSONFormatter('%(unknown_key)s %(message)s')
 
         self.logHandler.setFormatter(fr)
         msg = "testing unknown logging format"
@@ -86,7 +85,7 @@ class TestJsonLogger(unittest.TestCase):
             self.assertTrue(False, "Should succeed")
 
     def testLogADict(self):
-        fr = jsonlogger.JsonFormatter()
+        fr = JSONFormatter()
         self.logHandler.setFormatter(fr)
 
         msg = {"text": "testing logging", "num": 1, 5: "9",
@@ -100,7 +99,7 @@ class TestJsonLogger(unittest.TestCase):
         self.assertEqual(logJson["message"], None)
 
     def testLogExtra(self):
-        fr = jsonlogger.JsonFormatter()
+        fr = JSONFormatter()
         self.logHandler.setFormatter(fr)
 
         extra = {"text": "testing logging", "num": 1, 5: "9",
@@ -114,7 +113,7 @@ class TestJsonLogger(unittest.TestCase):
         self.assertEqual(logJson["message"], "hello")
 
     def testJsonDefaultEncoder(self):
-        fr = jsonlogger.JsonFormatter()
+        fr = JSONFormatter()
         self.logHandler.setFormatter(fr)
 
         msg = {"adate": datetime.datetime(1999, 12, 31, 23, 59),
@@ -132,7 +131,7 @@ class TestJsonLogger(unittest.TestCase):
     def testJsonCustomDefault(self):
         def custom(o):
             return "very custom"
-        fr = jsonlogger.JsonFormatter(json_default=custom)
+        fr = JSONFormatter(json_default=custom)
         self.logHandler.setFormatter(fr)
 
         msg = {"adate": datetime.datetime(1999, 12, 31, 23, 59),
@@ -143,7 +142,7 @@ class TestJsonLogger(unittest.TestCase):
         self.assertEqual(logJson.get("normal"), "value")
 
     def testJsonCustomLogicAddsField(self):
-        class CustomJsonFormatter(jsonlogger.JsonFormatter):
+        class CustomJsonFormatter(JSONFormatter):
 
             def process_log_record(self, log_record):
                 log_record["custom"] = "value"
@@ -155,7 +154,7 @@ class TestJsonLogger(unittest.TestCase):
         self.assertEqual(logJson.get("custom"), "value")
 
     def testExcInfo(self):
-        fr = jsonlogger.JsonFormatter()
+        fr = JSONFormatter()
         self.logHandler.setFormatter(fr)
         try:
             raise Exception('test')

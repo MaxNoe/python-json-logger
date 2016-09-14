@@ -1,24 +1,18 @@
-import sys
-if sys.version_info < (2, 6):
-    print(sys.stderr, "{}: need Python 2.6 or later.".format(sys.argv[0]))
-    print(sys.stderr, "Your Python is {}".format(sys.version))
-    sys.exit(1)
-
 from setuptools import setup, find_packages
 
 setup(
-    name = "python-json-logger",
-    version = "0.1.4",
-    url = "http://github.com/madzak/python-json-logger",
-    license = "BSD",
-    description = "A python library adding a json log formatter",
-    author = "Zakaria Zajac",
-    author_email = "zak@madzak.com",
-    package_dir = {'': 'src'},
-    packages = find_packages("src", exclude="tests"),
-    test_suite = "tests.tests",
-    install_requires = ['setuptools'],
-    classifiers = [
+    name='logging_json',
+    version='0.1.5',
+    url='http://github.com/madzak/python-json-logger',
+    license='BSD',
+    description='A python library adding a json log formatter',
+    author='Zakaria Zajac',
+    author_email='zak@madzak.com',
+    package_dir={'': 'logging_json'},
+    packages=find_packages('logging_json', exclude='tests'),
+    test_suite='tests.tests',
+    install_requires=['setuptools'],
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',

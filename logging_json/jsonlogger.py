@@ -10,7 +10,7 @@ import traceback
 
 from inspect import istraceback
 
-#Support order in python 2.7 and 3
+# Support order in python 2.7 and 3
 try:
     from collections import OrderedDict
 except ImportError:
@@ -22,7 +22,8 @@ RESERVED_ATTRS = (
     'args', 'asctime', 'created', 'exc_info', 'exc_text', 'filename',
     'funcName', 'levelname', 'levelno', 'lineno', 'module',
     'msecs', 'message', 'msg', 'name', 'pathname', 'process',
-    'processName', 'relativeCreated', 'stack_info', 'thread', 'threadName')
+    'processName', 'relativeCreated', 'stack_info', 'thread', 'threadName'
+)
 
 RESERVED_ATTR_HASH = dict(zip(RESERVED_ATTRS, RESERVED_ATTRS))
 
@@ -36,15 +37,14 @@ def merge_record_extra(record, target, reserved=RESERVED_ATTR_HASH):
     :param reserved: dict or list with reserved keys to skip
     """
     for key, value in record.__dict__.items():
-        #this allows to have numeric keys
-        if (key not in reserved
-            and not (hasattr(key, "startswith")
-                     and key.startswith('_'))):
+        # this allows to have numeric keys
+        if (key not in reserved and
+                not (hasattr(key, "startswith") and key.startswith('_'))):
             target[key] = value
     return target
 
 
-class JsonFormatter(logging.Formatter):
+class JSONFormatter(logging.Formatter):
     """
     A custom formatter to format logging records as json strings.
     extra values will be formatted as str() if nor supported by
@@ -62,7 +62,7 @@ class JsonFormatter(logging.Formatter):
         self.json_default = kwargs.pop("json_default", None)
         self.json_encoder = kwargs.pop("json_encoder", None)
         self.prefix = kwargs.pop("prefix", "")
-        #super(JsonFormatter, self).__init__(*args, **kwargs)
+
         logging.Formatter.__init__(self, *args, **kwargs)
         if not self.json_encoder and not self.json_default:
             def _default_json_handler(obj):
